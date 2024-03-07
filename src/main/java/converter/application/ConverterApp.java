@@ -1,6 +1,7 @@
 package converter.application;
 
 import converter.dao.ConverterDao;
+import converter.entity.Currency;
 import converter.entity.Converter;
 import converter.view.ConverterGUI;
 import java.util.List;
@@ -20,6 +21,13 @@ public class ConverterApp {
         gui.setResult(convertedCurrency);
     }
     public void passCurrencyNamesToGui() {
+        List<String> currencyNames = converterDao.getCurrencyNames();
+        gui.setCurrencyNames(currencyNames);
+    }
+
+    public void addCurrency(String name, double rate, String abbrevation) {
+        Currency currency = new Currency(abbrevation, name, rate);
+        converterDao.persist(currency);
         List<String> currencyNames = converterDao.getCurrencyNames();
         gui.setCurrencyNames(currencyNames);
 

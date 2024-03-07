@@ -10,10 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.TilePane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.util.List;
@@ -23,21 +20,30 @@ public class ConverterGUI extends Application {
     private final BorderPane layout = new BorderPane();
     private final HBox top = new HBox();
     private final Label databaseStatus = new Label();
+    private final Label fromLabel = new Label();
+    private final Label toLabel = new Label();
     private final ComboBox<String> currencyFrom = new ComboBox<>();
     private final ComboBox<String> currencyTo = new ComboBox<>();
     private final VBox middle = new VBox();
     private final HBox conversion = new HBox();
+
     private final HBox result = new HBox();
     private final TextField currencyAmount = new TextField();
     private final Label resultLabel = new Label();
     private final TextField currencyResult = new TextField();
     private final Label amountLabel = new Label();
+    private final Label errorLabel = new Label();
+
 
     public void start(Stage stage) {
         top.setAlignment(Pos.CENTER);
         top.setSpacing(25);
 
         layout.setTop(top);
+
+        fromLabel.setText("From:");
+        toLabel.setText("To:");
+        top.getChildren().addAll(fromLabel, currencyFrom, toLabel, currencyTo);
         BorderPane.setMargin(top, new Insets(50, 5, 5, 5));
 
         databaseStatus.setText("Database status: OK");
@@ -56,6 +62,7 @@ public class ConverterGUI extends Application {
         currencyResult.setPromptText("...");
 
         Button convertButton = new Button("Convert");
+        Button openNewWindow = new Button("Add Currency");
         convertButton.setMinWidth(100);
 
         conversion.setAlignment(Pos.CENTER);
@@ -67,7 +74,7 @@ public class ConverterGUI extends Application {
         result.setSpacing(5);
         result.getChildren().addAll(resultLabel, currencyResult);
 
-        middle.getChildren().addAll(conversion, result, convertButton);
+        middle.getChildren().addAll(conversion, result, convertButton, openNewWindow);
 
         layout.setCenter(middle);
 
@@ -104,6 +111,11 @@ public class ConverterGUI extends Application {
                 currencyResult.setText("Invalid input!");
             }
         });
+
+        openNewWindow.setOnAction(actionEvent -> {
+            openAddCurrencyWindow();
+        });
+
         try {
             controller.passCurrencyNamesToGui();
         } catch (Exception e) {
@@ -114,17 +126,76 @@ public class ConverterGUI extends Application {
         stage.show();
     }
 
+    public void openAddCurrencyWindow() {
+        Stage stage = new Stage();
+        BorderPane layout = new BorderPane();
+        VBox contents = new VBox();
+        HBox inputs = new HBox();
+        Label addCurrencyLabel = new Label("Add new currency");
+        TextField currencyName = new TextField();
+        TextField currencyAbbreviation = new TextField();
+        TextField currencyRate = new TextField();
+        Button addCurrency = new Button("Add Currency");
+
+        currencyName.setPromptText("Name");
+        currencyName.setMaxWidth(120);
+
+
+        currencyAbbreviation.setPromptText("Abbreviation");
+        currencyAbbreviation.setMaxWidth(120);
+
+
+        currencyRate.setPromptText("Rate");
+        currencyRate.setMaxWidth(120);
+
+
+        addCurrency.setMinWidth(120);
+
+        inputs.getChildren().addAll(currencyName, currencyAbbreviation, currencyRate);
+        inputs.setAlignment(Pos.CENTER);
+        inputs.setSpacing(5);
+
+        contents.getChildren().addAll(addCurrencyLabel, inputs, addCurrency, errorLabel);
+        contents.setAlignment(Pos.CENTER);
+        contents.setSpacing(25);
+
+        layout.setCenter(contents);
+
+        Scene scene = new Scene(layout, 600, 600);
+        scene.getStylesheets().add("style.css");
+        stage.setTitle("Add Currency");
+        stage.setScene(scene);
+        stage.show();
+
+        addCurrency.setOnAction(actionEvent -> {
+            try {
+                if (currencyName.getText().isEmpty() || currencyAbbreviation.getText().isEmpty() || currencyRate.getText().isEmpty()) {
+                    throw new Exception();
+                }
+            } catch (Exception e) {
+                errorLabel.setText("Fields cannot be empty!");
+            }
+            try {
+                String name = currencyName.getText();
+                double rate = Double.parseDouble(currencyRate.getText());
+                String abbrevation = currencyAbbreviation.getText();
+                controller.addCurrency(name, rate, abbrevation);
+            } catch (NumberFormatException e) {
+                errorLabel.setText("Invalid input!");
+            }
+
+        });
+    }
     public void setCurrencyNames(List<String> currencyNames) {
-        Label fromLabel = new Label("Select currency from :");
-        Label toLabel = new Label("Select currency to :");
+        currencyFrom.getItems().clear();
+        currencyTo.getItems().clear();
         currencyFrom.setItems(FXCollections.observableArrayList(currencyNames));
         currencyTo.setItems(FXCollections.observableArrayList(currencyNames));
         currencyFrom.setValue(currencyNames.get(0));
         currencyTo.setValue(currencyNames.get(1));
-        top.getChildren().addAll(fromLabel, currencyFrom, toLabel, currencyTo);
+
 
     }
-
     public void init() {
         controller = new ConverterApp(this);
     }
