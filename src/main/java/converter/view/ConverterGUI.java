@@ -1,6 +1,6 @@
 package converter.view;
 
-import converter.application.ConverterApp;
+import converter.controller.ConverterController;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 import java.util.List;
 
 public class ConverterGUI extends Application {
-    private ConverterApp controller;
+    private ConverterController controller;
     private final BorderPane layout = new BorderPane();
     private final HBox top = new HBox();
     private final Label databaseStatus = new Label();
@@ -46,7 +46,7 @@ public class ConverterGUI extends Application {
         top.getChildren().addAll(fromLabel, currencyFrom, toLabel, currencyTo);
         BorderPane.setMargin(top, new Insets(50, 5, 5, 5));
 
-        databaseStatus.setText("Database status: OK");
+        databaseStatus.setText("Database status: connected!");
         databaseStatus.setStyle("-fx-text-fill: green;");
         layout.setBottom(databaseStatus);
         BorderPane.setMargin(databaseStatus, new Insets(10, 10, 10, 10));
@@ -103,7 +103,7 @@ public class ConverterGUI extends Application {
                     try {
                         controller.convert(amount, from, to);
                     } catch (Exception e) {
-                        databaseStatus.setText("ERROR! Database connection failed!");
+                        databaseStatus.setText("Database status: not connected!");
                         databaseStatus.setStyle("-fx-text-fill: red;");
                     }
                 }
@@ -120,7 +120,7 @@ public class ConverterGUI extends Application {
             controller.passCurrencyNamesToGui();
         } catch (Exception e) {
             e.printStackTrace();
-            databaseStatus.setText("ERROR! Database connection failed!");
+            databaseStatus.setText("Database status: not connected!");
             databaseStatus.setStyle("-fx-text-fill: red;");
         }
         stage.show();
@@ -197,7 +197,7 @@ public class ConverterGUI extends Application {
 
     }
     public void init() {
-        controller = new ConverterApp(this);
+        controller = new ConverterController(this);
     }
 
     public void setResult(String result) {

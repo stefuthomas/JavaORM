@@ -1,6 +1,5 @@
 package converter.entity;
 public class Converter {
-
     public String convert(double amount, double from, double to, String abbrevation) {
         double conversion;
         String formattedConversion;
