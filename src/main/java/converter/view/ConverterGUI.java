@@ -102,6 +102,7 @@ public class ConverterGUI extends Application {
                 } else {
                     try {
                         controller.convert(amount, from, to);
+                        controller.createTransaction(from, to, amount);
                     } catch (Exception e) {
                         databaseStatus.setText("Database status: not connected!");
                         databaseStatus.setStyle("-fx-text-fill: red;");

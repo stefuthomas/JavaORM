@@ -17,23 +17,13 @@ public class ConverterDao {
         em.getTransaction().commit();
     }
 
-    public Currency find(int id) {
+    public Currency find(String currency) {
         EntityManager em = MariaDbJpaConnection.getInstance();
-        return em.find(Currency.class, id);
-    }
-
-    public void update(Currency currency) {
-        EntityManager em = MariaDbJpaConnection.getInstance();
-        em.getTransaction().begin();
-        em.merge(currency);
-        em.getTransaction().commit();
-    }
-
-    public void delete(Currency currency) {
-        EntityManager em = MariaDbJpaConnection.getInstance();
-        em.getTransaction().begin();
-        em.remove(currency);
-        em.getTransaction().commit();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Currency> query = cb.createQuery(Currency.class);
+        Root<Currency> root = query.from(Currency.class);
+        query.select(root).where(cb.equal(root.get("currencyName"), currency));
+        return em.createQuery(query).getSingleResult();
     }
 
     public double getRate(String currency) {

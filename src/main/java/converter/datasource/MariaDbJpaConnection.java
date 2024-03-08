@@ -7,7 +7,7 @@ public class MariaDbJpaConnection {
     public static EntityManager getInstance() {
         if (em==null) {
             if (emf==null) {
-                emf = Persistence.createEntityManagerFactory("ConverterMariaDbUnit");
+                emf = Persistence.createEntityManagerFactory("Converter2MariaDbUnit");
             }
             em = emf.createEntityManager();
         }
