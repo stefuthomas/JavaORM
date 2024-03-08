@@ -6,7 +6,7 @@
   <persistence-unit name="Converter2MariaDbUnit" transaction-type="RESOURCE_LOCAL">
     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
     <properties>
-      <property name="jakarta.persistence.jdbc.url" value="jdbc:mariadb://localhost:3306/converter2"/>
+      <property name="jakarta.persistence.jdbc.url" value="jdbc:mariadb://localhost:3306/Converter2"/>
       <property name="jakarta.persistence.jdbc.user" value="appuser"/>
       <property name="jakarta.persistence.jdbc.password" value="password"/>
       <property name="jakarta.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver"/>

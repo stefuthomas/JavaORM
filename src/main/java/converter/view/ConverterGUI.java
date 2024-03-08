@@ -26,7 +26,6 @@ public class ConverterGUI extends Application {
     private final ComboBox<String> currencyTo = new ComboBox<>();
     private final VBox middle = new VBox();
     private final HBox conversion = new HBox();
-
     private final HBox result = new HBox();
     private final TextField currencyAmount = new TextField();
     private final Label resultLabel = new Label();

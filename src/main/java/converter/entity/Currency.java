@@ -3,7 +3,7 @@ package converter.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "currency")
+@Table
 public class Currency {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,8 +15,8 @@ public class Currency {
     @Column(name = "conversion_rate")
     private double conversionRate;
 
-    public Currency(String abbrevation, String currencyName, double conversionRate) {
-        this.abbreviation = abbrevation;
+    public Currency(String abbreviation, String currencyName, double conversionRate) {
+        this.abbreviation = abbreviation;
         this.currencyName = currencyName;
         this.conversionRate = conversionRate;
     }
